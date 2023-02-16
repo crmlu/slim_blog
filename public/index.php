@@ -5,49 +5,19 @@ declare(strict_types=1);
 require __DIR__ . '/../bootstrap.php';
 
 use App\Middleware\AuthMiddleware;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
 
 $app = new Slim\App($settings);
 
 $container = $app->getContainer();
 
-$container['db'] = function ($container) {
-    $dsn = 'mysql:host=' . $container['settings']['db']['host']
-        . ';dbname=' . $container['settings']['db']['database']
-        . ';charset=' . $container['settings']['db']['charset'];
-    $pdo = new PDO($dsn, $container['settings']['db']['username'], $container['settings']['db']['password']);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    return $pdo;
-};
-
-$container['view'] = function ($container) {
-    $view = new League\Plates\Engine(__DIR__ . '/../App/Views');
-    $view->addData([
-        'router' => $container->router,
-        'cur_uri' => $container->request->getUri()->getBasePath() . '/' . $container->request->getUri()->getPath(),
-        'flash' => $container->flash
-    ]);
-    return $view;
-};
-$container['ArticlesController'] = function ($container) {
-    return new App\Controllers\ArticlesController($container);
-};
-$container['Articles'] = function ($container) {
-    return new App\Models\ArticlesModel($container);
-};
-$container['Users'] = function ($container) {
-    return new App\Models\UsersModel($container);
-};
-$container['flash'] = function () {
-    return new Slim\Flash\Messages();
-};
+foreach ($dependencies_arr as $key => $code) {
+    $container[$key] = $code;
+}
 
 $app->group('', function () {
-    $this->get('/login', App\Controllers\LoginController::class . ':getLogin')->setName('login');
-    $this->post('/login', App\Controllers\LoginController::class . ':postLogin')->setName('post-login');
-    $this->get('/logout', App\Controllers\LoginController::class . ':getLogout')->setName('logout');
+    $this->get('/login', App\Controllers\AuthController::class . ':getLogin')->setName('login');
+    $this->post('/login', App\Controllers\AuthController::class . ':postLogin')->setName('post-login');
+    $this->get('/logout', App\Controllers\AuthController::class . ':getLogout')->setName('logout');
     $this->get('/posts/create', App\Controllers\ArticlesController::class . ':getCreate')->setName('get-create-article');
     $this->post('/posts/create', App\Controllers\ArticlesController::class . ':postCreate')->setName('post-create-article');
     $this->get('/posts/delete/{id}', App\Controllers\ArticlesController::class . ':getDelete')->setName('delete-article');

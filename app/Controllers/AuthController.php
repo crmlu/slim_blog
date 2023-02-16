@@ -9,7 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
 use App\Models\UsersModel;
 
-class LoginController extends BaseController
+class AuthController extends BaseController
 {
     protected UsersModel $data;
 
@@ -18,7 +18,7 @@ class LoginController extends BaseController
         $this->data = $container->get('Users');
     }
 
-    public function getLogin(Request $request, Response $response)
+    public function getLogin(Request $request, Response $response): string
     {
         return $this->view->render('login', ['url' => $request->getUri()->getPath()]);
     }
@@ -27,8 +27,8 @@ class LoginController extends BaseController
     {
         $username = $request->getParam('username');
         $password = $request->getParam('password');
-        
         $user = $this->data->getByUsername($username);
+        
         if (empty($user) || !password_verify($password, $user['password'])) {
             $this->flash->addMessage('error', 'Invalid username/password');
             return $response->withRedirect($this->dc->router->pathFor('login'));
@@ -39,10 +39,9 @@ class LoginController extends BaseController
         }
     }
 
-    public function getLogout(Request $request, Response $response)
+    public function getLogout(Request $request, Response $response): Response
     {
         unset($_SESSION['user'], $_SESSION['username']);
-        // $this->flash->addMessage('info', 'Ok');
         return $response->withRedirect($this->dc->router->pathFor('home'));
     }
 }

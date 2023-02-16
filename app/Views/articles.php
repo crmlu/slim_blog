@@ -1,4 +1,4 @@
-<?php $this->layout('main', ['title' => 'Blog posts']) ?>
+<?php $this->layout('base', ['title' => 'Blog posts']) ?>
 
 <?= $this->insert('_menu'); ?>
 <?= $this->insert('_messages'); ?>

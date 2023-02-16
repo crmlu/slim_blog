@@ -1,4 +1,4 @@
-<?php $this->layout('main', ['title' => 'Login']); ?>
+<?php $this->layout('base', ['title' => 'Login']); ?>
 
 <?= $this->insert('_menu'); ?>
 <?= $this->insert('_messages'); ?>

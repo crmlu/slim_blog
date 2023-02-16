@@ -1,4 +1,4 @@
-<?php $this->layout('main', ['title' => $page_title]); ?>
+<?php $this->layout('base', ['title' => $page_title]); ?>
 
 <?= $this->insert('_menu'); ?>
 <h1><?= $page_title ?></h1>

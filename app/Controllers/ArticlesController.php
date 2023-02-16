@@ -23,8 +23,8 @@ class ArticlesController extends BaseController
     {
         $articles = $this->data->list();
         return $this->view->render('articles', ['articles' => $articles]);
-    
     }
+
     public function getList(Request $request, Response $response): string
     {
         $articles = $this->data->list();
@@ -82,7 +82,7 @@ class ArticlesController extends BaseController
         }
     }
 
-    public function getDelete(Request $request, Response $response, array $args)
+    public function getDelete(Request $request, Response $response, array $args): Response
     {
         $result = $this->data->delete((int)$args['id']);
         if (!$result) {
