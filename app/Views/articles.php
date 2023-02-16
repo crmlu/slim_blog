@@ -1,12 +1,18 @@
 <?php $this->layout('main', ['title' => 'Blog posts']) ?>
 
-<a href="<?=$this->e($router->pathFor('login'))?>">Login</a>
+<?= $this->insert('_menu'); ?>
+<?= $this->insert('_messages'); ?>
+
 <h1>Blog posts</h1>
 <?php if (!empty($articles)): ?>
-    <?php foreach ($articles as $item): ?>
-        <div>
-        <h2><?=$this->e($item['title'])?></h2>
-        <p><?=$this->e($item['content'])?></p>
+    <div class="row">
+        <div class="col-md-8 blog-main">
+            <?php foreach ($articles as $item): ?>
+                <div class="blog-post">
+                    <h3 class="blog-post-title"><?=$this->e($item['title'])?></h3>
+                    <p><?=$this->e($item['content'])?></p>
+                </div>
+            <?php endforeach; ?>
         </div>
-    <?php endforeach; ?>
+    </div>
 <?php endif; ?>

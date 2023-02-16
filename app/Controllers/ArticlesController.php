@@ -33,15 +33,14 @@ class ArticlesController extends BaseController
             'page_title' => 'Blog posts',
             'columns'    => [
                 ['column' => 'title', 'name' => 'Title'],
-                ['column' => 'content', 'name' => 'Content']
             ],
             'create_link' => 1
         ]);
     }
 
-    public function getUpdate(Request $request, Response $response, array $args)
+    public function getUpdate(Request $request, Response $response, array $args): string
     {
-        $article = $this->data->getByID($args['id']);
+        $article = $this->data->getByID((int)$args['id']);
         if ($article) {
             return $this->view->render('upsert_article', ['page_title' => 'Update post', 'item' => $article]);
         } else {
@@ -51,7 +50,7 @@ class ArticlesController extends BaseController
 
     public function postUpdate(Request $request, Response $response, array $args)
     {
-        $article = $this->data->getByID($args['id']);
+        $article = $this->data->getByID((int)$args['id']);
         if (!$article) {
             throw new NotFoundException($request, $response);
         } else {
@@ -66,7 +65,7 @@ class ArticlesController extends BaseController
         }
     }
 
-    public function getCreate(Request $request, Response $response)
+    public function getCreate(Request $request, Response $response): string
     {
         return $this->view->render('upsert_article', ['page_title' => 'Create post']);
     }

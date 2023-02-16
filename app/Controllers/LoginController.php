@@ -27,20 +27,22 @@ class LoginController extends BaseController
     {
         $username = $request->getParam('username');
         $password = $request->getParam('password');
+        
         $user = $this->data->getByUsername($username);
         if (empty($user) || !password_verify($password, $user['password'])) {
-            $this->flash->addMessage('error', 'Invalid user/password');
+            $this->flash->addMessage('error', 'Invalid username/password');
             return $response->withRedirect($this->dc->router->pathFor('login'));
         } else {
             $_SESSION['user'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
             return $response->withRedirect($this->dc->router->pathFor('articles'));
         }
     }
 
     public function getLogout(Request $request, Response $response)
     {
-        unset($_SESSION['user']);
-        $this->flash->addMessage('info', 'Ok');
-        return $response->withRedirect($this->dc->router->pathFor('login'));
+        unset($_SESSION['user'], $_SESSION['username']);
+        // $this->flash->addMessage('info', 'Ok');
+        return $response->withRedirect($this->dc->router->pathFor('home'));
     }
 }

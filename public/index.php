@@ -26,10 +26,9 @@ $container['view'] = function ($container) {
     $view = new League\Plates\Engine(__DIR__ . '/../App/Views');
     $view->addData([
         'router' => $container->router,
-        'uri' => $container->request->getUri(),
+        'cur_uri' => $container->request->getUri()->getBasePath() . '/' . $container->request->getUri()->getPath(),
         'flash' => $container->flash
     ]);
-    // $view->loadExtension(new League\Plates\Extension\URI($_SERVER['ORIG_PATH_INFO']));
     return $view;
 };
 $container['ArticlesController'] = function ($container) {
