@@ -35,3 +35,7 @@ $dependencies_arr['Users'] = function ($container) {
 $dependencies_arr['flash'] = function () {
     return new Slim\Flash\Messages();
 };
+
+$dependencies_arr['validator'] = function ($container) {
+    return new App\Helpers\Validator($container);
+};

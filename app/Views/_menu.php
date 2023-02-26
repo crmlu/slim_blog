@@ -8,14 +8,20 @@
         <div class="collapse navbar-collapse" id="navmenu">
             <ul class="navbar-nav mr-auto">
                 <?php //unauthorized user ?>
-                <?php if (empty($_SESSION['username'])): ?>
+                <?php if (empty($_SESSION['user'])): ?>
                     <li class="nav-item <?= ($router->pathFor('login') == $cur_uri) ? 'active' : '' ?>">
                         <a class="nav-link" href="<?= $this->e($router->pathFor('login')) ?>">Login</a>
                     </li>
                 <?php //loggedin user ?>
                 <?php else:?>
                     <li class="nav-item <?= ($router->pathFor('articles') == $cur_uri) ? 'active' : '' ?> ?>">
-                        <a class="nav-link" href="<?= $this->e($router->pathFor('articles')) ?>">Edit posts</a>
+                        <a class="nav-link" href="<?= $this->e($router->pathFor('articles')) ?>">Posts</a>
+                    </li>
+                    <li class="nav-item <?= ($router->pathFor('users') == $cur_uri) ? 'active' : '' ?> ?>">
+                        <a class="nav-link" href="<?= $this->e($router->pathFor('users')) ?>">Users</a>
+                    </li>
+                    <li class="nav-item <?= ($router->pathFor('get-update-user', ['id' => $_SESSION['user']]) == $cur_uri) ? 'active' : '' ?> ?>">
+                        <a class="nav-link" href="<?= $this->e($router->pathFor('get-update-user', ['id' => $_SESSION['user']])) ?>">My profile</a>
                     </li>
                     <li class="nav-item <?= ($router->pathFor('logout') == $cur_uri) ? 'active' : '' ?> ?>">
                         <a class="nav-link" href="<?= $this->e($router->pathFor('logout')) ?>">Logout</a>

@@ -5,7 +5,9 @@
 <?= $this->insert('_messages'); ?>
 
 <?php if (!empty($create_link)): ?>
-    <a class="btn btn-sm btn-success" role="button" href="<?=$this->e($router->pathFor('get-create-article'))?>">Write new post</a>
+    <a class="btn btn-sm btn-success" role="button" href="<?=$this->e($router->pathFor($create_path))?>">
+        <?= $this->e($create_title) ?>
+    </a>
 <?php endif; ?>
 <?php if (!empty($items)): ?>
     <table class="table table-striped">
@@ -24,8 +26,8 @@
                 <td><?= $item[$column['column']] ?></td>
                 <?php endforeach; ?>
                 <td>
-                    <a class="btn btn-sm btn-primary" role="button" href="<?=$this->e($router->pathFor('get-update-article', ['id' => $item['id']]))?>">Edit</a>
-                    <a class="btn btn-sm btn-warning" role="button" href="<?=$this->e($router->pathFor('delete-article', ['id' => $item['id']]))?>">Delete</a>
+                    <a class="btn btn-sm btn-primary" role="button" href="<?=$this->e($router->pathFor($edit_path, ['id' => $item['id']]))?>">Edit</a>
+                    <a class="btn btn-sm btn-warning" role="button" href="<?=$this->e($router->pathFor($delete_path, ['id' => $item['id']]))?>">Delete</a>
                 </td>
             </tr>
             <?php endforeach; ?>
