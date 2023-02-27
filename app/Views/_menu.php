@@ -20,11 +20,20 @@
                     <li class="nav-item <?= ($router->pathFor('users') == $cur_uri) ? 'active' : '' ?> ?>">
                         <a class="nav-link" href="<?= $this->e($router->pathFor('users')) ?>">Users</a>
                     </li>
-                    <li class="nav-item <?= ($router->pathFor('get-update-user', ['id' => $_SESSION['user']]) == $cur_uri) ? 'active' : '' ?> ?>">
-                        <a class="nav-link" href="<?= $this->e($router->pathFor('get-update-user', ['id' => $_SESSION['user']])) ?>">My profile</a>
-                    </li>
-                    <li class="nav-item <?= ($router->pathFor('logout') == $cur_uri) ? 'active' : '' ?> ?>">
-                        <a class="nav-link" href="<?= $this->e($router->pathFor('logout')) ?>">Logout</a>
+                    <li class="nav-item dropdown 
+                        <?= ($router->pathFor('get-update-user', ['id' => $_SESSION['user']]) == $cur_uri) ? 'active' : '' ?> ?>">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                        <?= $this->e($_SESSION['username']) ?>
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item"
+                                href="<?= $this->e($router->pathFor('get-update-user', ['id' => $_SESSION['user']])) ?>">
+                                My profile
+                            </a>
+                            <a class="dropdown-item" href="<?= $this->e($router->pathFor('logout')) ?>">
+                                Logout
+                            </a>
+                        </div>
                     </li>
                 <?php endif; ?>
             </ul>

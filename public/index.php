@@ -5,6 +5,7 @@ declare(strict_types=1);
 require __DIR__ . '/../bootstrap.php';
 
 use App\Middleware\AuthMiddleware;
+use App\Middleware\GuestMiddleware;
 use Respect\Validation\Factory;
 
 $app = new Slim\App($settings);
@@ -24,8 +25,9 @@ Factory::setDefaultInstance(
 $app->group('', function () {
     $this->get('/login', App\Controllers\AuthController::class . ':getLogin')->setName('login');
     $this->post('/login', App\Controllers\AuthController::class . ':postLogin')->setName('post-login');
+})->add(new GuestMiddleware($container));
+$app->group('', function () {
     $this->get('/logout', App\Controllers\AuthController::class . ':getLogout')->setName('logout');
-
     $this->get('/users/create', App\Controllers\UsersController::class . ':getCreate')->setName('get-create-user');
     $this->post('/users/create', App\Controllers\UsersController::class . ':postCreate')->setName('post-create-user');
     $this->get('/users/delete/{id}', App\Controllers\UsersController::class . ':getDelete')->setName('delete-user');
@@ -40,6 +42,7 @@ $app->group('', function () {
     $this->post('/posts/{id}', App\Controllers\ArticlesController::class . ':postUpdate')->setName('post-update-article');
     $this->get('/posts', App\Controllers\ArticlesController::class . ':getList')->setName('articles');
 })->add(new AuthMiddleware($container));
+
 $app->get('/', App\Controllers\ArticlesController::class . ':getIndex')->setName('home');
 
 $app->run();

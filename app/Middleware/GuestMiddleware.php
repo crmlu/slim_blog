@@ -7,9 +7,8 @@ namespace App\Middleware;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface;
-use Slim\Exception\NotFoundException;
 
-class AuthMiddleware
+class GuestMiddleware
 {
     protected ContainerInterface $dc;
 
@@ -20,12 +19,10 @@ class AuthMiddleware
 
     public function __invoke(Request $request, Response $response, callable $next): Response
     {
-        $logged_in = (!empty($_SESSION['user']) && $this->dc->get('Users')->getByID((int)$_SESSION['user'])) ? true : false;
-        
-        if ($logged_in) {
-            return $response = $next($request, $response);
+        if ($this->dc->auth->check()) {
+            return $response->withRedirect($this->dc->router->pathFor('articles'));
         } else {
-            return $response->withRedirect($this->dc->router->pathFor('login'));
+            return $response = $next($request, $response);   
         }
     }
 }

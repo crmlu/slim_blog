@@ -93,6 +93,10 @@ class UsersController extends BaseController
 
     public function getDelete(Request $request, Response $response, array $args): Response
     {
+        if ($_SESSION['user'] == $args['id']) {
+            $this->flash->addMessage('error', 'Cannot delete the user that is logged in');
+            return $response->withRedirect($this->dc->router->pathFor('users'));
+        }
         $result = $this->data->delete((int)$args['id']);
         if (!$result) {
             $this->flash->addMessage('error', 'Cannot delete user');
