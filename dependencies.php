@@ -39,3 +39,7 @@ $dependencies_arr['flash'] = function () {
 $dependencies_arr['validator'] = function ($container) {
     return new App\Helpers\Validator($container);
 };
+
+$dependencies_arr['auth'] = function ($container) {
+    return new App\Helpers\Auth($container);
+};
