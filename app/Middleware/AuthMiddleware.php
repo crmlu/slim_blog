@@ -20,9 +20,7 @@ class AuthMiddleware
 
     public function __invoke(Request $request, Response $response, callable $next): Response
     {
-        $logged_in = (!empty($_SESSION['user']) && $this->dc->get('Users')->getByID((int)$_SESSION['user'])) ? true : false;
-        
-        if ($logged_in) {
+        if ($this->dc->auth->check()) {
             return $response = $next($request, $response);
         } else {
             return $response->withRedirect($this->dc->router->pathFor('login'));
