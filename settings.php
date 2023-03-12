@@ -15,5 +15,6 @@ $settings = [
             'collation' => 'utf8mb4_general_ci',
             'prefix'    => '',
         ],
+        'uploads' => __DIR__ . '/uploads',
     ],
 ];

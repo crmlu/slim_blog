@@ -43,3 +43,11 @@ $dependencies_arr['validator'] = function ($container) {
 $dependencies_arr['auth'] = function ($container) {
     return new App\Helpers\Auth($container);
 };
+
+$dependencies_arr['Uploads'] = function ($container) {
+    return new App\Models\UploadsModel($container);
+};
+
+$dependencies_arr['files'] = function ($container) {
+    return new App\Helpers\Uploads($container, $container['settings']['uploads']);
+};

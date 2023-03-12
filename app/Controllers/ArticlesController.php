@@ -11,6 +11,7 @@ use Psr\Container\ContainerInterface;
 use App\Models\ArticlesModel;
 use Slim\Exception\NotFoundException;
 use Respect\Validation\Validator as v;
+use Slim\Http\UploadedFile;
 
 class ArticlesController extends BaseController
 {
@@ -58,8 +59,10 @@ class ArticlesController extends BaseController
         if (!$validation_result) {
             return $this->view->render('upsert_article', ['page_title' => 'Create post', 'item' => $request->getParsedBody()]);
         }
-
-        $result = $this->data->insert($request->getParsedBody());
+        $uploads = $request->getUploadedFiles();
+        $data = $request->getParsedBody();
+        $data['image'] = $this->dc->files->create($uploads['image']);
+        $result = $this->data->insert($data);
         if (!$result) {
             $this->flash->addMessageNow('error', 'Cannot save post');
             return $this->view->render('upsert_article', ['page_title' => 'Create post', 'item' => $request->getParsedBody()]);
@@ -91,7 +94,10 @@ class ArticlesController extends BaseController
                 return $this->view->render('upsert_article', ['page_title' => 'Update post', 'item' => $article]);
             }
 
-            $result = $this->data->update($request->getParsedBody());
+            $uploads = $request->getUploadedFiles();
+            $data = $request->getParsedBody();
+            $data['image'] = $this->dc->files->update($uploads['image'], $article['image']);
+            $result = $this->data->update($data);
             if ($result) {
                 $this->flash->addMessage('info', 'Post updated');
                 return $response->withRedirect($this->dc->router->pathFor('get-update-article', ['id'=>$args['id']]));
@@ -104,6 +110,10 @@ class ArticlesController extends BaseController
 
     public function getDelete(Request $request, Response $response, array $args): Response
     {
+        $article = $this->data->getByID((int)$args['id']);
+        if (!empty($article['image'])) {
+            $this->dc->Uploads->delete((int)$article['image']);
+        }
         $result = $this->data->delete((int)$args['id']);
         if (!$result) {
             $this->flash->addMessage('error', 'Cannot delete post');

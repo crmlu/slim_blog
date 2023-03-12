@@ -5,22 +5,17 @@ namespace App\Models;
 
 use Psr\Container\ContainerInterface;
 
-class BaseModel
+class UploadsModel
 {
     protected \PDO $db;
     protected string $table;
 
     public function __construct(ContainerInterface $container) {
         $this->db = $container->get('db');
+        $this->table = 'uploads';
     }
 
-    public function list(): array
-    {
-        $st = $this->db->query("SELECT * FROM {$this->table}");
-        return $st->fetchAll() ?? [];
-    }
-
-    public function insert(array $data): bool
+    public function insert(array $data): ?int
     {
         try {
             $columns = array();
@@ -30,26 +25,9 @@ class BaseModel
             }
             $st = $this->db->prepare($q . implode(',' , $columns));
             $st->execute($data);
-            return true;
+            return (int)$this->db->lastInsertId();
         } catch(\PDOException $e) {
-            return false;
-        }
-    }
-
-    public function update(array $data): bool
-    {
-        try {
-            $columns = array();
-            $q = "UPDATE {$this->table} SET ";     
-            foreach ($data as $key => $item) {
-                $columns[] = "{$key} = :{$key}";
-            }
-            $q = $q . implode(',' , $columns). ' WHERE id = :id';
-            $st = $this->db->prepare($q);
-            $st->execute($data);
-            return true;
-        } catch(\PDOException $e) {
-            return false;
+            return null;
         }
     }
 

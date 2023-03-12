@@ -14,4 +14,41 @@ class ArticlesModel extends BaseModel
         parent::__construct($container);
         $this->table = 'articles';
     }
+
+    public function getByID(int $id): ?array
+    {
+        try{
+            $st = $this->db->prepare(
+                "SELECT
+                    a.*, u.id AS file_id, u.name AS file_name
+                FROM
+                    {$this->table} AS a
+                LEFT JOIN
+                    uploads AS u ON u.id = a.image
+                WHERE
+                    a.id = ?"
+            );
+            $st->execute([$id]);
+            $item = $st->fetch();
+            if (!$item) {
+                return null;
+            }
+            return $item;
+        } catch (\PDOException $e) {
+            return null;
+        }
+    }
+
+    public function list(): array
+    {
+        $st = $this->db->query(
+            "SELECT
+                a.*, u.id AS file_id, u.name AS file_name
+            FROM
+                {$this->table} AS a
+            LEFT JOIN
+                uploads AS u ON u.id = a.image"
+        );
+        return $st->fetchAll() ?? [];
+    }
 }

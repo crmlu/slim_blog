@@ -43,6 +43,7 @@ $app->group('', function () {
     $this->get('/posts', App\Controllers\ArticlesController::class . ':getList')->setName('articles');
 })->add(new AuthMiddleware($container));
 
+$app->get('/uploads/{id}/{name}', App\Controllers\UploadsController::class)->setName('uploads');
 $app->get('/', App\Controllers\ArticlesController::class . ':getIndex')->setName('home');
 
 $app->run();

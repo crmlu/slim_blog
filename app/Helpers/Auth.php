@@ -6,8 +6,6 @@ namespace App\Helpers;
 
 use Slim\Http\Request;
 use Psr\Container\ContainerInterface;
-use Slim\Flash\Messages as Flash;
-use Respect\Validation\Validator as v;
 
 class Auth
 {
